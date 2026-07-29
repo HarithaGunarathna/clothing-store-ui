@@ -1,56 +1,108 @@
 @import "tailwindcss";
 
-@theme {
-  --color-midnight: #121063;
-  --color-tahiti: #3ab7bf;
+/* ==========================================================================
+   Luna design tokens
+   Light, warm-neutral canvas — a stone scale, not cold gray — with a single
+   confident accent (clay) reserved for the one thing per screen that should
+   pop: a CTA, a link, a focus ring, a sale badge. Every colour in the app
+   comes from here — restyling the brand means editing this block alone.
+   ========================================================================== */
 
-  --color-dark-gray: #2C2C2E;
-  --color-gray: #C7C7CC;
-  --color-light-gray: #D1D1D6;
+@theme {
+  /* --- Neutrals: warm stone ---------------------------------------------- */
+  --color-stone-50: #faf9f7;
+  --color-stone-100: #f2efe9;
+  --color-stone-200: #e7e2d8;
+  --color-stone-300: #d6cebd;
+  --color-stone-400: #b3a891;
+  --color-stone-500: #8c8171;
+  --color-stone-600: #665c4d;
+  --color-stone-700: #453d33;
+  --color-stone-800: #2a251f;
+  --color-stone-900: #1a1613;
+
+  /* --- Canvas & surfaces --------------------------------------------------*/
+  --color-canvas: var(--color-stone-50); /* page background */
+  --color-surface: #ffffff; /* cards, panels */
+  --color-surface-2: var(--color-stone-100); /* raised / hover */
+  --color-line: var(--color-stone-200); /* hairlines, input borders */
+  --color-line-strong: var(--color-stone-300);
+
+  /* --- Text ---------------------------------------------------------------*/
+  --color-ink: var(--color-stone-900); /* primary text, primary button */
+  --color-muted: var(--color-stone-600); /* secondary text */
+  --color-faint: var(--color-stone-500); /* tertiary, placeholders */
+
+  /* --- Accent: clay -------------------------------------------------------*/
+  --color-clay-50: #fdf1ec;
+  --color-clay-100: #fadecf;
+  --color-clay-300: #e39a6e;
+  --color-clay-400: #cc6a3c;
+  --color-clay-500: #b9502a; /* the one pop of colour */
+  --color-clay-600: #9a4021;
+  --color-clay-700: #7a331c;
+
+  /* --- Semantic — desaturated to sit quietly beside the neutrals --------- */
+  --color-success: #3f7d53;
+  --color-danger: #b3261e;
+  --color-warning: #a8711b;
+  --color-info: #3d5a80;
+
+  /* --- Type ---------------------------------------------------------------*/
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-sans: "Inter", "Segoe UI", system-ui, sans-serif;
+
+  /* --- Radius & elevation ---------------------------------------------------*/
+  --radius-card: 0.75rem;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 2px rgb(26 22 19 / 0.04), 0 8px 24px -12px rgb(26 22 19 / 0.12);
+  --shadow-lift: 0 24px 48px -20px rgb(26 22 19 / 0.22);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+html {
+  color-scheme: light;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
 }
 
 #root {
   min-height: 100vh;
-  background-color: #ECECEC;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+::selection {
+  background: var(--color-clay-100);
+  color: var(--color-ink);
 }
 
-.sign-in{
-  font-family: "Optima", "Segoe", "Candara", sans-serif;
-  font-weight: bold;
+/* One focus treatment everywhere, so keyboard users get a consistent target. */
+:focus-visible {
+  outline: 2px solid var(--color-clay-500);
+  outline-offset: 2px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* ==========================================================================
+   Brand utilities
+   ========================================================================== */
+
+/* Hairline divider. */
+.brand-rule {
+  height: 1px;
+  background-color: var(--color-line);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+/* Accent word inside a headline — the only spot of colour in otherwise ink
+   type. Deliberately not a gradient: one flat, confident hue. */
+.brand-accent {
+  color: var(--color-clay-500);
+  font-style: italic;
 }
