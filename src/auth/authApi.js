@@ -23,6 +23,21 @@ export async function login({ userName, password }) {
   return access_token;
 }
 
+/** POST /auth/admin/login — admin-only, username/password. No social option. */
+export async function adminLogin({ userName, password }) {
+  const { access_token } = await apiJson("/auth/admin/login", {
+    method: "POST",
+    body: jsonBody({ userName, password }),
+  });
+  setAccessToken(access_token);
+  return access_token;
+}
+
+/** GET /auth/me — the full profile behind the access token. */
+export async function getMe() {
+  return apiJson("/auth/me");
+}
+
 /** POST /auth/logout — 204 always. Ends this session only. */
 export async function logout() {
   try {

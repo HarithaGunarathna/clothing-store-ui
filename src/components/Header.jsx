@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
-import logo from "../assets/brand_name.png";
 import { useAuth } from "../auth/AuthContext";
+import { AdminRoleBadgeTones, AdminRoles, UserRoleLabels } from "../constants/userConstants";
 import { useShop } from "../shop/ShopContext";
+import Badge from "./ui/Badge";
 import Button from "./ui/Button";
 
 const NAV = [
@@ -54,6 +55,9 @@ export default function Header() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const displayName =
+    [user?.firstName, user?.lastName].filter(Boolean).join(" ") || user?.username;
+
   async function handleSignOut() {
     await signOut();
     setMenuOpen(false);
@@ -64,7 +68,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-line bg-canvas/90 backdrop-blur">
       <div className="container mx-auto flex h-16 items-center gap-6 px-4">
         <Link to="/" className="flex shrink-0 items-center">
-          <img src={logo} alt="Luna" className="h-auto w-28 object-contain" />
+          <span className="font-display text-2xl italic text-ink">Luna</span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">
@@ -87,6 +91,11 @@ export default function Header() {
         <div className="flex-1" />
 
         <div className="flex items-center gap-1">
+          {status === "authenticated" && AdminRoles.includes(user?.role) ? (
+            <Badge tone={AdminRoleBadgeTones[user.role]} className="mr-2">
+              {UserRoleLabels[user.role]}
+            </Badge>
+          ) : null}
           <IconLink to="/search" label="Search" path={ICONS.search} />
           <IconLink
             to="/wishlist"
@@ -118,7 +127,7 @@ export default function Header() {
                 aria-haspopup="menu"
                 className="flex h-9 w-9 items-center justify-center rounded-pill bg-ink text-sm font-medium text-surface"
               >
-                {(user?.username ?? "L").charAt(0).toUpperCase()}
+                {(displayName ?? "L").charAt(0).toUpperCase()}
               </button>
 
               {menuOpen ? (
@@ -128,8 +137,7 @@ export default function Header() {
                 >
                   <div className="border-b border-line px-4 py-3">
                     <p className="truncate text-sm font-medium text-ink">
-                      {/* null for Google/Facebook users — the API never sets it. */}
-                      {user?.username ?? "Your account"}
+                      {displayName ?? "Your account"}
                     </p>
                     <p className="text-xs text-faint">Signed in</p>
                   </div>

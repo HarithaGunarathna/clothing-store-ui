@@ -17,13 +17,7 @@ const EMPTY = {
   password: "",
   phoneNumber: "",
   dob: "",
-  role: "buyer",
 };
-
-const ROLES = [
-  { value: "buyer", label: "Shopping", caption: "Browse and buy" },
-  { value: "seller", label: "Selling", caption: "List your own pieces" },
-];
 
 export default function Register() {
   const { status, signUp } = useAuth();
@@ -49,14 +43,14 @@ export default function Register() {
     setError(null);
     setSubmitting(true);
     try {
-      // Optional fields must be omitted rather than sent empty.
+      // Optional fields must be omitted rather than sent empty. No `role` —
+      // /auth/register only ever creates buyers; the backend decides that.
       const payload = {
         firstName: form.firstName.trim(),
         lastName: form.lastName.trim(),
         userName: form.userName.trim(),
         email: form.email.trim(),
         password: form.password,
-        role: form.role,
         ...(form.phoneNumber.trim() ? { phoneNumber: form.phoneNumber.trim() } : {}),
         ...(form.dob ? { dob: form.dob } : {}),
       };
@@ -156,43 +150,6 @@ export default function Register() {
               hint="Optional"
             />
           </div>
-
-          <fieldset>
-            <legend className="text-xs font-medium uppercase tracking-[0.08em] text-muted">
-              I'm here for
-            </legend>
-            <div className="mt-3 grid gap-3 sm:grid-cols-2">
-              {ROLES.map(({ value, label, caption }) => {
-                const active = form.role === value;
-                return (
-                  <label
-                    key={value}
-                    className={[
-                      "cursor-pointer rounded-lg border p-4 transition",
-                      active
-                        ? "border-ink bg-surface-2"
-                        : "border-line bg-canvas hover:border-line-strong",
-                    ].join(" ")}
-                  >
-                    <input
-                      type="radio"
-                      name="role"
-                      value={value}
-                      checked={active}
-                      onChange={() => set("role")(value)}
-                      className="sr-only"
-                    />
-                    <span className="block text-sm font-medium text-ink">
-                      {label}
-                    </span>
-                    <span className="mt-0.5 block text-xs text-faint">
-                      {caption}
-                    </span>
-                  </label>
-                );
-              })}
-            </div>
-          </fieldset>
 
           <Button type="submit" fullWidth size="lg" disabled={submitting}>
             {submitting ? "Creating your account…" : "Create account"}
